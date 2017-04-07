@@ -585,6 +585,15 @@ service mediadrm /system/bin/mediadrmserver
     group bluetooth net_bt_admin net_bt
     seclabel u:r:uim:s0
 
+# IMS    
+service ims_regmanager /system/bin/exe-ims-regmanagerprocessnative
+   class late_start
+   group net_bt_admin inet radio wifi
+   disabled
+
+on property:persist.ims.regmanager.mode=1
+    start ims_regmanager
+    
 service imsqmidaemon /system/bin/imsqmidaemon
     class main
     user system
@@ -597,24 +606,23 @@ service imsdatadaemon /system/bin/imsdatadaemon
     socket ims_datad stream 0660 system radio
     group system wifi radio inet net_raw log qcom_diag net_admin
     disabled
-
-on property:sys.ims.DATA_DAEMON_STATUS=1
-   start ims_rtp_daemon
-   start imscmservice
-
-
+    
+on property:sys.ims.QMI_DAEMON_STATUS=1
+    start imsdatadaemon    
+   
 service ims_rtp_daemon /system/bin/ims_rtp_daemon
    class main
    user system
    socket ims_rtpd stream 0660 system radio
    group radio net_raw diag qcom_diag log inet
    disabled
-
+   
+on property:sys.ims.DATA_DAEMON_STATUS=1
+   start imscmservice
+   start ims_rtp_daemon
+   
 service imscmservice /system/bin/imscmservice
    class main
    user system
    group radio net_raw diag qcom_diag log
    disabled
-
-on property:sys.ims.QMI_DAEMON_STATUS=1
-    start imsdatadaemon
