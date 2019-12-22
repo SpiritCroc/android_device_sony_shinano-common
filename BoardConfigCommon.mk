@@ -120,7 +120,7 @@ TARGET_LD_SHIM_LIBS := \
 
 # Filesystem
 BOARD_FLASH_BLOCK_SIZE := 131072
-TARGET_FS_CONFIG_GEN += $(COMMON_PATH)/config.fs
+TARGET_FS_CONFIG_GEN += device/sony/shinano-common/config.fs
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
